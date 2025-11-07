@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<ruleset name="SEO Cluster Links">
+	<description>WordPress Coding Standards for SEO Cluster Links Plugin</description>
+
+	<!-- Show progress and sniff codes in all reports -->
+	<arg value="ps"/>
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+
+	<!-- Check all PHP files in directory tree by default. -->
+	<file>.</file>
+
+	<!-- Exclude the Composer Vendor directory. -->
+	<exclude-pattern>/vendor/*</exclude-pattern>
+
+	<!-- Exclude the Node Modules directory. -->
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+
+	<!-- Exclude minified Javascript files. -->
+	<exclude-pattern>*.min.js</exclude-pattern>
+
+	<!-- Use WordPress Coding Standards -->
+	<rule ref="WordPress-Core">
+		<!-- Allow array short syntax -->
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+	</rule>
+
+	<!-- Use WordPress-Docs for documentation standards -->
+	<rule ref="WordPress-Docs"/>
+
+	<!-- Use WordPress-Extra for best practices -->
+	<rule ref="WordPress-Extra">
+		<!-- Allow short array syntax -->
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+	</rule>
+
+	<!-- Allow for theme specific naming exceptions -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<!-- Value: replace the function, class, and variable prefixes used. Separate multiple prefixes with a comma. -->
+			<property name="prefixes" type="array" value="scl,SEO_Cluster_Links"/>
+		</properties>
+	</rule>
+
+	<!-- Check for PHP cross-version compatibility. -->
+	<config name="testVersion" value="7.0-"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- Additional rules -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array" value="seo-cluster-links"/>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.Files.FileName">
+		<properties>
+			<property name="strict_class_file_names" value="false"/>
+		</properties>
+	</rule>
+
+	<!-- Enforce PSR-4 autoloading -->
+	<rule ref="PSR4">
+		<properties>
+			<property name="namespace" value="SEO_Cluster_Links"/>
+		</properties>
+	</rule>
+</ruleset>

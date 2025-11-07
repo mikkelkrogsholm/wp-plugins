@@ -22,6 +22,27 @@ define('SCL_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SCL_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 /**
+ * Activation hook
+ */
+function scl_activate() {
+	// Store plugin version
+	update_option( 'scl_version', SCL_VERSION );
+
+	// Flush rewrite rules
+	flush_rewrite_rules();
+}
+register_activation_hook( __FILE__, 'scl_activate' );
+
+/**
+ * Deactivation hook
+ */
+function scl_deactivate() {
+	// Flush rewrite rules
+	flush_rewrite_rules();
+}
+register_deactivation_hook( __FILE__, 'scl_deactivate' );
+
+/**
  * Main plugin class
  */
 class SEO_Cluster_Links {
