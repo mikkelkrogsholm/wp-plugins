@@ -1,0 +1,21 @@
+{
+    "name": "mikkelkrogsholm/seo-llm-optimizer",
+    "description": "WordPress plugin for optimizing content for search engines and LLM systems",
+    "type": "wordpress-plugin",
+    "require": {
+        "php": ">=7.4",
+        "league/html-to-markdown": "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "SEO_LLM_Optimizer\\": "includes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mikkel Krogsholm",
+            "email": "mikkel@example.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}

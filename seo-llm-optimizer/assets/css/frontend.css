@@ -1,0 +1,924 @@
+/**
+ * Frontend Styles
+ *
+ * Mobile-first responsive styling for SEO & LLM Optimizer frontend interface.
+ * Includes floating button, accessible modal, tabs, and toast notifications.
+ *
+ * @package SEO_LLM_Optimizer
+ */
+
+/* ==========================================================================
+   CSS Variables
+   ========================================================================== */
+
+:root {
+    --slo-primary: #2563eb;
+    --slo-primary-hover: #1d4ed8;
+    --slo-primary-active: #1e40af;
+    --slo-secondary: #64748b;
+    --slo-secondary-hover: #475569;
+    --slo-success: #059669;
+    --slo-error: #dc2626;
+    --slo-info: #0891b2;
+    --slo-border: #e2e8f0;
+    --slo-bg: #ffffff;
+    --slo-bg-alt: #f8fafc;
+    --slo-text: #1e293b;
+    --slo-text-muted: #64748b;
+    --slo-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --slo-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --slo-radius: 8px;
+    --slo-radius-sm: 4px;
+    --slo-transition: all 0.2s ease;
+    --slo-z-button: 999;
+    --slo-z-modal: 9999;
+    --slo-z-toast: 99999;
+}
+
+/* ==========================================================================
+   Floating Button
+   ========================================================================== */
+
+.slo-trigger {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: var(--slo-z-button);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 20px;
+    background: var(--slo-primary);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--slo-radius);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    box-shadow: var(--slo-shadow-lg);
+    transition: var(--slo-transition);
+}
+
+.slo-trigger:hover {
+    background: var(--slo-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 12px 12px -5px rgba(0, 0, 0, 0.08);
+}
+
+.slo-trigger:active {
+    background: var(--slo-primary-active);
+    transform: translateY(0);
+}
+
+.slo-trigger:focus {
+    outline: 3px solid var(--slo-primary);
+    outline-offset: 2px;
+}
+
+.slo-trigger svg {
+    flex-shrink: 0;
+}
+
+.slo-trigger span {
+    white-space: nowrap;
+}
+
+/* Mobile: Icon only */
+@media (max-width: 640px) {
+    .slo-trigger span {
+        display: none;
+    }
+
+    .slo-trigger {
+        padding: 12px;
+        width: 44px;
+        height: 44px;
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   Modal
+   ========================================================================== */
+
+.slo-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--slo-z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.slo-modal[hidden] {
+    display: none;
+}
+
+.slo-modal-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Backdrop */
+.slo-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .slo-modal,
+    .slo-modal-backdrop {
+        transition: none;
+    }
+}
+
+/* Modal Content */
+.slo-modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    background: var(--slo-bg);
+    border-radius: var(--slo-radius);
+    box-shadow: var(--slo-shadow-lg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slo-modal-slide-up 0.3s ease;
+}
+
+@keyframes slo-modal-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .slo-modal-content {
+        animation: none;
+    }
+}
+
+/* Mobile: Full screen */
+@media (max-width: 640px) {
+    .slo-modal {
+        padding: 0;
+    }
+
+    .slo-modal-content {
+        max-width: 100%;
+        max-height: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
+}
+
+/* ==========================================================================
+   Modal Header
+   ========================================================================== */
+
+.slo-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px;
+    border-bottom: 1px solid var(--slo-border);
+    flex-shrink: 0;
+}
+
+.slo-modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--slo-text);
+}
+
+@media (min-width: 640px) {
+    .slo-modal-header h2 {
+        font-size: 24px;
+    }
+}
+
+.slo-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--slo-text-muted);
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+    transition: var(--slo-transition);
+    border-radius: var(--slo-radius-sm);
+}
+
+.slo-modal-close:hover {
+    color: var(--slo-text);
+    background: var(--slo-bg-alt);
+}
+
+.slo-modal-close:focus {
+    outline: 3px solid var(--slo-primary);
+    outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Tabs
+   ========================================================================== */
+
+.slo-modal-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 16px 0;
+    background: var(--slo-bg-alt);
+    border-bottom: 1px solid var(--slo-border);
+    overflow-x: auto;
+    flex-shrink: 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+.slo-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--slo-text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--slo-transition);
+}
+
+.slo-tab:hover {
+    color: var(--slo-text);
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.slo-tab:focus {
+    outline: 3px solid var(--slo-primary);
+    outline-offset: -3px;
+    z-index: 1;
+}
+
+.slo-tab-active,
+.slo-tab[aria-selected="true"] {
+    color: var(--slo-primary);
+    border-bottom-color: var(--slo-primary);
+    background: var(--slo-bg);
+}
+
+.slo-tab svg {
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Modal Body
+   ========================================================================== */
+
+.slo-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.slo-panel {
+    display: block;
+}
+
+.slo-panel[hidden] {
+    display: none;
+}
+
+.slo-panel-content {
+    padding: 24px;
+}
+
+@media (min-width: 640px) {
+    .slo-panel-content {
+        padding: 32px;
+    }
+}
+
+.slo-panel-description {
+    margin: 0 0 16px;
+    color: var(--slo-text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.slo-panel-subtitle {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--slo-text);
+}
+
+/* ==========================================================================
+   Preview Content
+   ========================================================================== */
+
+.slo-preview-content {
+    min-height: 200px;
+    margin-bottom: 24px;
+}
+
+.slo-preview-content pre {
+    padding: 16px;
+    background: var(--slo-bg-alt);
+    border: 1px solid var(--slo-border);
+    border-radius: var(--slo-radius-sm);
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--slo-text);
+}
+
+.slo-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: var(--slo-text-muted);
+    font-size: 16px;
+}
+
+.slo-error {
+    padding: 16px;
+    background: #fee;
+    border: 1px solid var(--slo-error);
+    border-radius: var(--slo-radius-sm);
+    color: var(--slo-error);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.slo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--slo-radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: var(--slo-transition);
+}
+
+.slo-btn:focus {
+    outline: 3px solid var(--slo-primary);
+    outline-offset: 2px;
+}
+
+.slo-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.slo-btn-primary {
+    background: var(--slo-primary);
+    color: #ffffff;
+}
+
+.slo-btn-primary:hover:not(:disabled) {
+    background: var(--slo-primary-hover);
+}
+
+.slo-btn-primary:active:not(:disabled) {
+    background: var(--slo-primary-active);
+}
+
+.slo-btn-secondary {
+    background: var(--slo-secondary);
+    color: #ffffff;
+}
+
+.slo-btn-secondary:hover:not(:disabled) {
+    background: var(--slo-secondary-hover);
+}
+
+.slo-panel-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Options Grid
+   ========================================================================== */
+
+.slo-options-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+@media (min-width: 640px) {
+    .slo-options-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .slo-options-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.slo-option-card {
+    padding: 20px;
+    background: var(--slo-bg-alt);
+    border: 1px solid var(--slo-border);
+    border-radius: var(--slo-radius);
+    transition: var(--slo-transition);
+}
+
+.slo-option-card:hover {
+    border-color: var(--slo-primary);
+    box-shadow: var(--slo-shadow);
+}
+
+.slo-option-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    background: var(--slo-primary);
+    color: #ffffff;
+    border-radius: var(--slo-radius-sm);
+}
+
+.slo-option-card h4 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--slo-text);
+}
+
+.slo-option-card p {
+    margin: 0 0 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--slo-text-muted);
+}
+
+/* ==========================================================================
+   Badges
+   ========================================================================== */
+
+.slo-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: var(--slo-radius-sm);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.slo-badge-success {
+    background: rgba(5, 150, 105, 0.1);
+    color: var(--slo-success);
+}
+
+/* ==========================================================================
+   Info Cards
+   ========================================================================== */
+
+.slo-chunks-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin: 24px 0;
+}
+
+@media (min-width: 640px) {
+    .slo-chunks-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.slo-info-card {
+    padding: 24px;
+    background: var(--slo-bg-alt);
+    border: 1px solid var(--slo-border);
+    border-radius: var(--slo-radius);
+}
+
+.slo-info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 16px;
+    background: var(--slo-primary);
+    color: #ffffff;
+    border-radius: var(--slo-radius);
+}
+
+.slo-info-card h4 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--slo-text);
+}
+
+.slo-info-card p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--slo-text-muted);
+}
+
+/* ==========================================================================
+   Toast Notifications
+   ========================================================================== */
+
+.slo-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: var(--slo-z-toast);
+    min-width: 200px;
+    max-width: 400px;
+    padding: 16px 20px;
+    background: var(--slo-bg);
+    border-left: 4px solid;
+    border-radius: var(--slo-radius-sm);
+    box-shadow: var(--slo-shadow-lg);
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: var(--slo-transition);
+    pointer-events: none;
+}
+
+.slo-toast-show {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.slo-toast-success {
+    border-left-color: var(--slo-success);
+    color: var(--slo-success);
+}
+
+.slo-toast-error {
+    border-left-color: var(--slo-error);
+    color: var(--slo-error);
+}
+
+.slo-toast-info {
+    border-left-color: var(--slo-info);
+    color: var(--slo-info);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .slo-toast {
+        transition: opacity 0.2s ease;
+        transform: none;
+    }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+    .slo-toast {
+        left: 20px;
+        right: 20px;
+        max-width: none;
+        transform: translateY(-100px);
+    }
+
+    .slo-toast-show {
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+    .slo-trigger,
+    .slo-btn-primary {
+        border: 2px solid currentColor;
+    }
+
+    .slo-modal-backdrop {
+        background: rgba(0, 0, 0, 0.9);
+    }
+
+    .slo-tab-active,
+    .slo-tab[aria-selected="true"] {
+        border-bottom-width: 3px;
+    }
+}
+
+/* ==========================================================================
+   Focus Visible (Modern browsers)
+   ========================================================================== */
+
+.slo-trigger:focus-visible,
+.slo-btn:focus-visible,
+.slo-tab:focus-visible,
+.slo-modal-close:focus-visible {
+    outline: 3px solid var(--slo-primary);
+    outline-offset: 2px;
+}
+
+/* Remove outline for mouse users */
+.slo-trigger:focus:not(:focus-visible),
+.slo-btn:focus:not(:focus-visible),
+.slo-tab:focus:not(:focus-visible),
+.slo-modal-close:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ==========================================================================
+   Dark Mode Support (Optional)
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --slo-bg: #1e293b;
+        --slo-bg-alt: #0f172a;
+        --slo-text: #f1f5f9;
+        --slo-text-muted: #94a3b8;
+        --slo-border: #334155;
+    }
+
+    .slo-modal-backdrop {
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    .slo-preview-content pre {
+        background: #0f172a;
+        border-color: #334155;
+    }
+}
+
+/* ==========================================================================
+   Options Tab
+   ========================================================================== */
+
+.slo-option-group {
+    margin-bottom: 20px;
+}
+
+.slo-option-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--slo-text);
+    cursor: pointer;
+}
+
+.slo-option-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.slo-option-group .description {
+    margin: 5px 0 0 28px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--slo-text-muted);
+}
+
+.slo-full-preview {
+    min-height: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--slo-border);
+    border-radius: var(--slo-radius-sm);
+    padding: 16px;
+    background: var(--slo-bg-alt);
+    margin-top: 16px;
+}
+
+.slo-full-preview:empty {
+    display: none;
+}
+
+.slo-full-preview pre {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--slo-text);
+}
+
+/* ==========================================================================
+   Chunks Tab
+   ========================================================================== */
+
+.slo-chunk-controls {
+    background: var(--slo-bg-alt);
+    padding: 20px;
+    border-radius: var(--slo-radius);
+    border: 1px solid var(--slo-border);
+    margin-bottom: 20px;
+}
+
+.slo-control-group {
+    margin-bottom: 16px;
+}
+
+.slo-control-group:last-child {
+    margin-bottom: 0;
+}
+
+.slo-control-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--slo-text);
+}
+
+.slo-control-group select,
+.slo-control-group input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--slo-border);
+    border-radius: var(--slo-radius-sm);
+    font-size: 14px;
+    color: var(--slo-text);
+    background: var(--slo-bg);
+    transition: var(--slo-transition);
+}
+
+.slo-control-group select:focus,
+.slo-control-group input[type="number"]:focus {
+    outline: 2px solid var(--slo-primary);
+    outline-offset: 0;
+    border-color: var(--slo-primary);
+}
+
+.slo-chunk-size-options {
+    padding: 16px;
+    background: rgba(37, 99, 235, 0.05);
+    border-radius: var(--slo-radius-sm);
+    margin: 16px 0;
+}
+
+.slo-chunks-preview {
+    min-height: 100px;
+}
+
+.slo-chunks-preview:empty {
+    display: none;
+}
+
+.slo-chunks-list {
+    margin-top: 20px;
+}
+
+.slo-chunks-count {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0 0 16px;
+    color: var(--slo-primary);
+}
+
+.slo-chunk-item {
+    border: 1px solid var(--slo-border);
+    border-radius: var(--slo-radius-sm);
+    margin-bottom: 12px;
+    padding: 16px;
+    background: var(--slo-bg);
+    transition: var(--slo-transition);
+}
+
+.slo-chunk-item:hover {
+    border-color: var(--slo-primary);
+    box-shadow: var(--slo-shadow);
+}
+
+.slo-chunk-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.slo-chunk-number {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--slo-text);
+}
+
+.slo-chunk-tokens {
+    color: var(--slo-text-muted);
+    font-size: 13px;
+    padding: 2px 8px;
+    background: var(--slo-bg-alt);
+    border-radius: var(--slo-radius-sm);
+}
+
+.slo-chunk-section {
+    flex: 1;
+    color: var(--slo-primary);
+    font-style: italic;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.slo-copy-chunk {
+    padding: 6px 12px;
+    font-size: 13px;
+    min-height: 32px;
+    margin-left: auto;
+}
+
+.slo-chunk-content {
+    margin: 0;
+    padding: 12px;
+    background: var(--slo-bg-alt);
+    border-radius: var(--slo-radius-sm);
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: var(--slo-text);
+    border: 1px solid var(--slo-border);
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+    .slo-chunk-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .slo-chunk-section {
+        white-space: normal;
+        overflow: visible;
+    }
+
+    .slo-copy-chunk {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .slo-trigger,
+    .slo-modal {
+        display: none !important;
+    }
+}

@@ -1,0 +1,51 @@
+# Git
+.git
+.gitignore
+
+# Documentation (keep in repo, but not needed in containers)
+*.md
+!README.md
+
+# IDE and Editor
+.vscode
+.idea
+.claude
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Composer
+vendor
+composer.lock
+
+# Build artifacts
+dist
+build
+*.log
+
+# WordPress specific
+wp-config.php
+.htaccess
+
+# Backups
+backups/
+*.sql
+*.tar.gz
+*.zip
+
+# Testing
+.phpunit.result.cache
+tests/
+phpunit.xml
