@@ -1,0 +1,32 @@
+/**
+ * Admin styles for SEO Cluster Links
+ */
+
+.scl-meta-box p {
+    margin: 8px 0;
+}
+
+.scl-meta-box label {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.scl-meta-box input[type="radio"] {
+    margin-right: 6px;
+}
+
+.scl-pillar-select {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #ddd;
+}
+
+.scl-pillar-select label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+}
+
+#scl_pillar_id {
+    margin-top: 6px;
+}
