@@ -135,6 +135,9 @@ class GhostToWordPressMigration:
                         # Get highest quality image (remove size parameter)
                         img_url = element['src']
                         img_url = re.sub(r'/size/w\d+/', '/size/w2000/', img_url)
+                        # Ensure absolute URL
+                        if img_url.startswith('/'):
+                            img_url = urljoin(self.config['ghost']['url'], img_url)
                         return img_url
 
             self.logger.debug(f"No featured image found for {post_url}")
@@ -275,8 +278,13 @@ class GhostToWordPressMigration:
         except Exception as e:
             self.logger.error(f"Failed to create WordPress post '{title}': {e}")
             if hasattr(e, 'response') and hasattr(e.response, 'text'):
-                self.logger.debug(f"Response: {e.response.text}")
+                self.logger.error(f"Response: {e.response.text[:500]}")
             self.stats['posts_failed'] += 1
+            self.stats['errors'].append({
+                'post': title,
+                'error': str(e),
+                'response': e.response.text[:200] if hasattr(e, 'response') else None
+            })
             return None
 
     def migrate_post(self, entry: feedparser.FeedParserDict) -> bool:
@@ -289,9 +297,20 @@ class GhostToWordPressMigration:
         # Extract data from RSS entry
         content = entry.get('content', [{}])[0].get('value', '')
         excerpt = entry.get('summary', '')
-        date = entry.get('published', '')
+        date_raw = entry.get('published', '')
         link = entry.get('link', '')
         slug = link.rstrip('/').split('/')[-1] if link else ''
+
+        # Convert date to WordPress format (ISO 8601)
+        date = None
+        if date_raw:
+            try:
+                from dateutil.parser import parse
+                parsed_date = parse(date_raw)
+                date = parsed_date.isoformat()
+            except:
+                self.logger.warning(f"Could not parse date: {date_raw}")
+                date = None
 
         # Get featured image
         featured_media_id = None
