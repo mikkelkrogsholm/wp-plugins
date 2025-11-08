@@ -1,0 +1,25 @@
+{
+  "ghost": {
+    "url": "https://brokk-sindre.dk",
+    "rss_feed": "https://brokk-sindre.dk/rss/",
+    "sitemap": "https://brokk-sindre.dk/sitemap.xml"
+  },
+  "wordpress": {
+    "url": "http://localhost:8082",
+    "api_base": "http://localhost:8082/wp-json/wp/v2",
+    "username": "admin",
+    "password": "CHANGE_ME"
+  },
+  "migration": {
+    "download_images": true,
+    "preserve_urls": true,
+    "import_as_draft": false,
+    "max_retries": 3,
+    "delay_between_requests": 1.0
+  },
+  "output": {
+    "images_dir": "./images",
+    "logs_dir": "./logs",
+    "report_file": "./output/migration-report.json"
+  }
+}
