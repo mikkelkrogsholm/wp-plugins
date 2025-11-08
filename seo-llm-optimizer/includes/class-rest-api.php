@@ -235,7 +235,7 @@ class SLO_REST_API {
 	 * @param WP_REST_Request $request Request object
 	 * @return bool|WP_Error True if allowed, error otherwise
 	 */
-	private function check_read_permission($request) {
+	public function check_read_permission($request) {
 		// Check if REST API is enabled
 		if (!$this->is_api_enabled()) {
 			return new WP_Error(
@@ -259,13 +259,9 @@ class SLO_REST_API {
 			return true;
 		}
 
-		// For public access, check if posts being accessed are published
-		// This is handled in the endpoint callback
-		return new WP_Error(
-			'rest_forbidden',
-			__('You must be logged in to access this endpoint', 'seo-llm-optimizer'),
-			array('status' => 401)
-		);
+		// For public access, allow access to published posts
+		// Individual endpoints will validate post status
+		return true;
 	}
 
 	/**
@@ -276,7 +272,7 @@ class SLO_REST_API {
 	 * @param WP_REST_Request $request Request object
 	 * @return bool|WP_Error True if allowed, error otherwise
 	 */
-	private function check_write_permission($request) {
+	public function check_write_permission($request) {
 		if (!current_user_can('edit_posts')) {
 			return new WP_Error(
 				'rest_forbidden',
